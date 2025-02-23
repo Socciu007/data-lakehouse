@@ -1,1 +1,6 @@
+# env
 env
+
+# delta_table
+data/delta_table
+data/delta_table/*
