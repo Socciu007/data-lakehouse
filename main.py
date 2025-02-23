@@ -1,19 +1,16 @@
 from pyspark.sql import SparkSession
-from delta import *
-from etl.extract_data import extract_data
 
-# Setup Spark + Delta Lake ( define DeltaSparkSessionExtension and DeltaCatalog)
-spark = SparkSession.builder \
-    .appName("DeltaLakeExample") \
-    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+spark = (SparkSession.builder
+    .appName("DeltaLakeApp")
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
     .getOrCreate()
-print("Spark + Delta Lake setup is successful!")
+)
+print("Spark + Delta Lake setup is successful!", spark)
 
-df = spark.read.csv('data/tourism_dataset.csv', header=True)
+# Tạo DataFrame mẫu
+data = [(1, "Alice"), (2, "Bob")]
+df = spark.createDataFrame(data, ["id", "name"])
 
-# Create DataFrame
-# data = extract_data(spark, "../data/tourism_dataset.csv")
-print(df.show())
-
-print("DataFrame created successfully!")
+# Hiển thị DataFrame
+df.show()
