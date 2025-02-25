@@ -1,16 +1,19 @@
-from pyspark.sql import SparkSession
+from config.spark_config import setup_spark_session
 
-spark = (SparkSession.builder
-    .appName("DeltaLakeApp")
-    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
-    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
-    .getOrCreate()
-)
-print("Spark + Delta Lake setup is successful!", spark)
+# Setup Spark Session
+spark = setup_spark_session()
+print("Spark + Delta Lake setup is successful!")
 
-# Tạo DataFrame mẫu
-data = [(1, "Alice"), (2, "Bob")]
+# Create Sample DataFrame
+data = [[1, "Alice"], [2, "Bob"]]
 df = spark.createDataFrame(data, ["id", "name"])
 
-# Hiển thị DataFrame
+# Display DataFrame
 df.show()
+
+# Save DataFrame to Delta Table
+# df.write.format("delta").mode("overwrite").save("data/delta_table/users")
+
+# Read Delta Table
+# df_delta = spark.read.format("delta").load("data/delta_table/users")
+# df_delta.show()
